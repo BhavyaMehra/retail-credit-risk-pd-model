@@ -1,7 +1,3 @@
--- ===============================
--- DECILE ANALYSIS (Model A & B)
--- ===============================
-
 WITH scored AS (
     SELECT
         default_flag,
