@@ -24,7 +24,7 @@ This project develops a **Probability of Default (PD)** model to:
 
 ## Dataset
 
-**Source:** LendingClub public dataset (Kaggle)
+**Source:** [LendingClub public dataset (Kaggle)] (https://www.kaggle.com/datasets/ethon0426/lending-club-20072020q1)
 
 - Data restricted to 2016–2018 originations  
 - Dataset not included due to size constraints  
