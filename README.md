@@ -14,9 +14,18 @@ This project develops a **Probability of Default (PD)** model to:
 
 ## Interactive Dashboard Preview
 
+### Portfolio Overview
+Highlights validation default rate and risk distribution across Grade and FICO segments.
+
 ![Portfolio Overview](reports/portfolio.png)
 
+### Model Discrimination
+Decile analysis showing risk concentration and cumulative bad capture for both models.
+
 ![Model Lift Analysis](reports/lift.png)
+
+### Policy Simulation
+Expected loss impact under 30% risk rejection strategy.
 
 ![Policy Simulation](reports/policy_simulation.png)
 
