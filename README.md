@@ -111,6 +111,15 @@ Model-driven rejection materially reduces portfolio expected loss.
 
 ---
 
+## Future Improvements
+
+- Incorporate survival modeling to handle censoring more rigorously  
+- Add reject inference methodology  
+- Compare with tree-based models (XGBoost)  
+- Introduce capital requirement impact simulation  
+
+---
+
 ## Tech Stack
 
 - **Python** (pandas, scikit-learn)  
