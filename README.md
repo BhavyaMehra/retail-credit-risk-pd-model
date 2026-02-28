@@ -110,22 +110,46 @@ Model-driven rejection materially reduces portfolio expected loss.
 
 ---
 
-## Key Insights
+## SQL Analysis
 
-- Default risk shows clear gradient across FICO bands and Grade  
-- Model B improves risk ranking performance  
-- Top decile captures ~18% of defaults  
-- 30% risk rejection removes nearly half of total bads  
-- Economic impact under policy simulation is substantial  
+Four query modules validate model outputs and simulate business decisions directly in PostgreSQL.
+
+| File | Purpose |
+|------|---------|
+| `portfolio_analysis.sql` | Baseline risk profiling — default rates segmented by Grade, FICO band, and loan term across the validation set |
+| `decile_analysis.sql` | Ranks borrowers into 10 risk buckets for both models; computes bad rate and cumulative bad capture per decile |
+| `model_performance_metrics.sql` | Calculates top-decile capture rate and 30% rejection capture for Model A vs Model B |
+| `policy_simulation.sql` | Simulates a 30% risk-rejection underwriting policy; computes baseline vs post-policy Expected Loss using PD × LGD × Loan Amount |
 
 ---
 
-## Future Improvements
+## Key Insights
 
-- Incorporate survival modeling to handle censoring more rigorously  
-- Add reject inference methodology  
-- Compare with tree-based models (XGBoost)  
-- Introduce capital requirement impact simulation  
+- FICO and Grade show strong default gradients — Grade G borrowers default at 
+  nearly 4x the rate of Grade A, confirming these as primary risk drivers for 
+  scorecard design
+- Model B's interest rate inclusion improves discrimination (AUC 0.68 vs 0.63) 
+  but introduces pricing circularity — high-risk borrowers receive higher rates, 
+  which the model then uses to predict risk; unsuitable for production without 
+  further isolation
+- Top decile concentrates 18% of all defaults in just 10% of the portfolio — 
+  meaningful risk separation for threshold-based underwriting
+- A 30% risk-based rejection policy reduces expected loss by 52% while declining 
+  less than a third of applications — a favorable risk-volume tradeoff for 
+  most retail lending contexts
+
+---
+
+## Limitations & Future Work
+
+- **Right-censoring:** 2019 originations excluded due to unresolved loan outcomes; 
+  survival modeling (e.g. Cox regression) would handle this more rigorously
+- **Reject inference:** Model trained only on approved loans — performance on 
+  declined population is unknown, a known bias in all application scorecards
+- **Single model class:** Logistic regression chosen for interpretability; 
+  XGBoost would likely improve AUC but reduce regulatory explainability
+- **LGD assumption:** Fixed at 59.3% from historical averages; a segmented 
+  LGD model by collateral type or loan term would improve EL precision  
 
 ---
 
