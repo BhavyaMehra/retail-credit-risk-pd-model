@@ -35,17 +35,17 @@ Retail lending portfolios require systematic frameworks for both origination dec
 ### Portfolio Overview
 Highlights validation default rate and risk distribution across Grade and FICO segments.
 
-![Portfolio Overview](reports/portfolio.png)
+![Portfolio Overview](portfolio.png)
 
 ### Model Discrimination
 Decile analysis showing risk concentration and cumulative bad capture for both models.
 
-![Model Lift Analysis](reports/lift.png)
+![Model Lift Analysis](lift.png)
 
 ### Policy Simulation
 Expected loss impact under 30% risk rejection strategy.
 
-![Policy Simulation](reports/policy_simulation.png)
+![Policy Simulation](policy_simulation.png)
 
 ### IFRS 9 ECL
 Provisioning by Stage, Comparison of provisioned vs actual loss.
