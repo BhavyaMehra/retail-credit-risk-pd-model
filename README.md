@@ -24,6 +24,13 @@ Retail lending portfolios require systematic frameworks for both origination dec
 
 ---
 
+## Dataset Scale
+
+- ~900k resolved loans
+- Out-of-time validation on 2018 cohort (~197k loans)
+
+---
+
 ## Model Architecture
 
 **Data Preparation -> Feature Engineering -> PD Modeling -> ECL Framework -> IFRS 9 Staging -> Stress Testing -> Backtest Validation -> Policy Simulation**
@@ -35,26 +42,26 @@ Retail lending portfolios require systematic frameworks for both origination dec
 ### Portfolio Overview
 Highlights validation default rate and risk distribution across Grade and FICO segments.
 
-![Portfolio Overview](portfolio.png)
+![Portfolio Overview](reports/portfolio.png)
 
 ### Model Discrimination
 Decile analysis showing risk concentration and cumulative bad capture for both models.
 
-![Model Lift Analysis](lift.png)
+![Model Lift Analysis](reports/lift.png)
 
 ### Policy Simulation
 Expected loss impact under 30% risk rejection strategy.
 
-![Policy Simulation](policy_simulation.png)
+![Policy Simulation](reports/policy_simulation.png)
 
 ### IFRS 9 ECL
 Provisioning by Stage, Comparison of provisioned vs actual loss.
 
-![IFRS 9 Dashboard](reports/ifrs9_ecl.png)
+![IFRS 9 Dashboard](reports/reports/ifrs9_ecl.png)
 
 ### Stress Testing & Scenario Analysis
 ECL uplift by Stage and Scenario
-![Stress Testing](stress_testing.png)
+![Stress Testing](reports/stress_testing.png)
 
 ---
 
@@ -227,7 +234,7 @@ data/         Dataset placeholder
 2. Create virtual environment
 3. Install dependencies
 
-pip install -r requirements.txt
+```pip install -r requirements.txt```
 
 4. Configure dataset path in .env
 5. Run modeling notebook in /notebooks
