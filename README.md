@@ -217,7 +217,6 @@ notebooks/    Modeling pipeline
 sql/          Analytics & policy simulation queries
 reports/      Power BI dashboard screenshots
 data/         Dataset placeholder
-.env.example  Environment variable template
 ```
 
 ---
