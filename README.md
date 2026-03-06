@@ -57,7 +57,7 @@ Expected loss impact under 30% risk rejection strategy.
 ### IFRS 9 ECL
 Provisioning by Stage, Comparison of provisioned vs actual loss.
 
-![IFRS 9 Dashboard](reports/reports/ifrs9_ecl.png)
+![IFRS 9 Dashboard](reports/ifrs9_ecl.png)
 
 ### Stress Testing & Scenario Analysis
 ECL uplift by Stage and Scenario
