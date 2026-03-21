@@ -1,4 +1,4 @@
-# Credit Default Prediction — End-to-End ML Pipeline with Validation and Stress Testing
+# Credit Default Prediction - End-to-End ML Pipeline with Validation and Stress Testing
 
 ## Overview
 
