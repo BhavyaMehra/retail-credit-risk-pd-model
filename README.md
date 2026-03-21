@@ -1,4 +1,4 @@
-# Retail Credit Risk Model — PD, LGD, EAD & IFRS 9 ECL
+# Retail Credit Risk Model - PD, LGD, EAD & IFRS 9 ECL
 
 ## Business Objective
 
