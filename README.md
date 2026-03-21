@@ -1,26 +1,19 @@
-# Retail Credit Risk Model — PD, LGD, EAD & IFRS 9 ECL
+# Credit Default Prediction — End-to-End ML Pipeline with Validation and Stress Testing
 
-## Business Objective
+## Overview
 
-Retail lending portfolios require systematic frameworks for both origination decisions and ongoing provisioning. This project builds a full credit risk modeling pipeline on Lending Club data covering:
-
-- Probability of Default (PD) modeling with WoE transformation and logistic regression
-- Expected loss quantification via PD x LGD x EAD
-- IFRS 9 three-stage ECL classification with 12-month vs. lifetime horizons
-- Macro stress testing across base, adverse and severe scenarios
-- Backtest validation of provisioned ECL against realised losses
-- Risk-based underwriting policy simulation
+End-to-end default prediction pipeline on 900k resolved loans. Logistic regression with WoE transformation, out-of-time validation on a fully resolved 2018 holdout cohort, and macro stress testing across three scenarios. Coverage ratio backtest separates calibration shortfall from discrimination failure.
 
 ---
 
 ## Project Highlights
 
-- Built interpretable PD scorecard using WoE transformation and logistic regression
-- Implemented full IFRS 9 pipeline: PD → LGD → EAD → Stage classification → ECL
-- Validated model via decile lift, KS statistic, and out-of-time testing
-- Stress-tested portfolio under macro scenarios with stage migration effects
-- Compared provisioned ECL vs realised losses using resolved loan cohort
-- Delivered interactive Power BI dashboards for portfolio monitoring
+- Built and validated PD model on 900k loans with out-of-time holdout; AUC 0.68, KS 0.26
+- WoE transformation with IV-based feature selection; training-set bin boundaries applied to test set to prevent leakage
+- Backtest against fully resolved 2018 cohort; coverage ratio analysis isolates calibration gap from discrimination performance
+- Stress-tested portfolio under base/adverse/severe macro scenarios with stage migration effects
+- Implemented IFRS 9 ECL pipeline: PD x LGD x EAD with three-stage classification
+- Policy simulation: top 30% PD rejection captures 46% of realised losses on 30% of volume
 
 ---
 
