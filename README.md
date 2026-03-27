@@ -26,7 +26,7 @@ End-to-end default prediction pipeline on 900k resolved loans. Logistic regressi
 
 ## Model Architecture
 
-**Data Preparation -> Feature Engineering -> PD Modeling(LR + XGBoost) Benchmark -> ECL Framework -> IFRS 9 Staging -> Stress Testing -> Backtest Validation -> Policy Simulation**
+**Data Preparation -> Feature Engineering -> PD Modeling(LR + XGBoost benchmark) -> ECL Framework -> IFRS 9 Staging -> Stress Testing -> Backtest Validation -> Policy Simulation**
 
 ---
 
