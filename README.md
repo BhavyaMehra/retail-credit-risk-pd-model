@@ -26,7 +26,7 @@ End-to-end default prediction pipeline on 900k resolved loans. Logistic regressi
 
 ## Model Architecture
 
-**Data Preparation -> Feature Engineering -> PD Modeling -> ECL Framework -> IFRS 9 Staging -> Stress Testing -> Backtest Validation -> Policy Simulation**
+**Data Preparation -> Feature Engineering -> PD Modeling(LR + XGBoost) Benchmark -> ECL Framework -> IFRS 9 Staging -> Stress Testing -> Backtest Validation -> Policy Simulation**
 
 ---
 
@@ -205,7 +205,7 @@ The 46% figure is based on actual realised losses (backtest), not provisioned EC
 
 ## Tech Stack
 
-- **Python** (pandas, scikit-learn, python-dotenv)
+- **Python** (pandas, scikit-learn, xgboost, logistic regression)
 - **PostgreSQL** (decile analysis & policy simulation)
 - **Power BI** (portfolio, discrimination, policy and IFRS 9 dashboards)
 
