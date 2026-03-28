@@ -13,7 +13,7 @@ End-to-end default prediction pipeline on 900k resolved loans. Logistic regressi
 - Backtest against fully resolved 2018 cohort; coverage ratio analysis isolates calibration gap from discrimination performance
 - Stress-tested portfolio under base/adverse/severe macro scenarios with stage migration effects
 - Implemented IFRS 9 ECL pipeline: PD x LGD x EAD with three-stage classification
-- Policy simulation: top 30% PD rejection captures 46% of realised losses on 30% of volume
+- Policy simulation: top 30% PD rejection captures 46% of realised losses and 57% of provisioned ECL on 30% of volume
 
 ---
 
@@ -114,7 +114,7 @@ ECL computed at loan level:
 ECL = PD x LGD x EAD
 ```
 
-**LGD** estimated empirically from realised recoveries on 2016-2017 defaults, segmented by loan grade; riskier grades attract lower recovery rates.
+**LGD** estimated empirically from realised net principal losses on 2016-2017 defaults, segmented by loan grade. Computed as `(loan_amnt - total_rec_prncp - recoveries) / loan_amnt`, capturing both principal repaid before default and post-charge-off recoveries. Riskier grades carry higher LGD because lower-grade borrowers tend to default earlier, having repaid less principal, resulting in lower total recovery against the original exposure.
 
 **EAD** set equal to loan amount at origination (CCF = 1.0; conservative, appropriate for fully drawn term loans).
 
@@ -148,28 +148,40 @@ Three macro scenarios applied via PD multipliers:
 
 PD capped at 1.0. Stages re-assigned under each scenario.
 
+| Scenario | Total ECL | Uplift vs Base |
+|----------|-----------|----------------|
+| Base | $352.5M | - |
+| Adverse | $538.1M | +52.6% |
+| Severe | $896.1M | +154.2% |
+
 ---
 
 ## Backtest Validation
 
-The 2018 cohort is fully resolved, allowing provisioned ECL to be compared against actual realised losses.
+The 2018 cohort is fully resolved, allowing provisioned ECL to be compared against actual realised losses. Actual net loss computed as `loan_amnt - total_rec_prncp - recoveries` on defaulted loans, consistent with the LGD estimation methodology.
 
-- **Portfolio coverage ratio: 0.89x** - model under-provisioned by ~11%
-- Accepted book (bottom 70% PD): 0.77x, materially under-provisioned
-- Rejected book (top 30% PD): 1.04x, slightly over-provisioned
+- **Portfolio coverage ratio: 0.58x** - model under-provisioned by ~42%
+- Accepted book (bottom 70% PD): ~0.47x, materially under-provisioned
+- Rejected book (top 30% PD): ~0.71x, also under-provisioned
 
-This is a **calibration shortfall, not a discrimination failure**. The model correctly rank-ordered risk; AUC and KS confirm strong separation. The issue is that absolute PD levels are under-estimated in the accepted portfolio. In production this would prompt a PD calibration exercise to scale output probabilities to observed default rates, leaving discrimination metrics unchanged.
+| Stage | Coverage Ratio |
+|-------|---------------|
+| Stage 1 | 0.13x |
+| Stage 2 | 0.57x |
+| Stage 3 | 0.75x |
+
+This is a **calibration failure, not a discrimination failure**. The model correctly rank-ordered risk across all stages; AUC and KS confirm strong separation. The issue is that absolute PD levels are systematically under-estimated across the entire portfolio, a known property of logistic regression on imbalanced data where predicted probabilities compress toward the mean. In production this would prompt a PD calibration exercise (Platt scaling or isotonic regression) to scale output probabilities to observed default rates, leaving discrimination metrics unchanged.
 
 ---
 
 ## Policy Simulation
 
-Risk-based rejection of top 30% highest-PD applications:
+Risk-based rejection of top 30% highest-PD applications (PD cutoff: 0.272):
 
-- Rejected loans accounted for **46% of realised losses** on 30% of volume
-- Confirms the model concentrates risk effectively in the tail
+- Rejected loans accounted for **46% of realised losses** on 30% of volume (backtest ground truth)
+- Rejected loans accounted for **57% of provisioned ECL** on 30% of volume (model estimate)
 
-The 46% figure is based on actual realised losses (backtest), not provisioned ECL; a more conservative and honest measure of policy impact.
+The gap between the two figures (57% provisioned vs 46% actual) directly reflects the calibration shortfall: the model over-concentrates predicted loss in the high-PD tail relative to where actual losses fell. The 46% figure is the more conservative and honest measure of policy impact.
 
 ---
 
@@ -188,8 +200,9 @@ The 46% figure is based on actual realised losses (backtest), not provisioned EC
 
 - Grade G borrowers default at nearly 4x the rate of Grade A; Grade and FICO are the dominant scorecard drivers, with strong monotonic default gradients confirming their inclusion
 - Model B's interest rate inclusion improves discrimination (AUC 0.68 vs 0.63) but introduces pricing circularity; high-risk borrowers receive higher rates, which the model then uses to predict risk, and it is not suitable for production without further isolation
-- Portfolio-level under-provisioning (0.89x coverage) is a calibration problem, not a model discrimination problem; the rank ordering is correct, the absolute probability levels are too low
+- Portfolio-level under-provisioning (0.58x coverage) is a calibration problem, not a model discrimination problem; the rank ordering is correct, but absolute probability levels are systematically too low across all stages
 - IFRS 9 stage migration under stress amplifies ECL uplift: a 1.5x PD shock produces more than 1.5x ECL increase because loans migrate from 12-month to lifetime provisioning horizons
+- The 46% actual loss capture vs 57% provisioned ECL capture under the 30% rejection policy is a direct measure of the calibration shortfall: the model over-concentrates predicted severity in the high-PD tail relative to realised outcomes
 
 ---
 
@@ -198,7 +211,7 @@ The 46% figure is based on actual realised losses (backtest), not provisioned EC
 - **Right-censoring:** 2019 originations excluded; survival modeling (Cox regression) would handle censored outcomes more rigorously
 - **Reject inference:** Model trained only on approved loans; performance on the declined population is unknown, a known bias in all application scorecards
 - **Single model class:** Logistic regression chosen for interpretability; XGBoost would likely improve AUC but reduce regulatory explainability
-- **PD calibration:** Model under-provisions at portfolio level (0.89x coverage); Platt scaling or isotonic regression could align predicted probabilities to observed default rates
+- **PD calibration:** Model under-provisions at portfolio level (0.58x coverage); Platt scaling or isotonic regression could align predicted probabilities to observed default rates
 - **12-month PD scaling:** Linear interpolation used for Stage 1 ECL; a vintage survival curve or hazard model would be more precise
 
 ---
